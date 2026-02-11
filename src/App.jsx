@@ -8,10 +8,16 @@ import ImageGallery from './components/ImageGallery';
 import ThemeToggle from './components/ThemeToggle';
 
 const App = () => {
+  // State for active tab (Quote vs Gallery) to manage UI switching
   const [activeTab, setActiveTab] = useState('quote');
+
+  // State for gallery search input to allow user queries
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Custom hook for Quote logic - separates business logic from UI
   const { quote, loading: quoteLoading, fetchQuote } = useQuote();
+
+  // Custom hook for Unsplash logic - handles API calls and image data
   const { images, loading: imagesLoading, fetchImages } = useUnsplash('nature');
 
   return (
