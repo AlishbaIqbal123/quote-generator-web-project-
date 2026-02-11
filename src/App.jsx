@@ -23,7 +23,7 @@ const App = () => {
   const { images, loading: imagesLoading, fetchImages } = useUnsplash('nature');
 
   return (
-    <div className="relative min-h-screen transition-colors duration-500 font-outfit overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div className="relative min-h-screen transition-colors duration-500 font-outfit overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col">
       <UserGuide />
 
       {/* Animated Background Blobs */}
@@ -37,7 +37,7 @@ const App = () => {
       }} />
 
       {/* Header */}
-      <header className="relative z-10 w-full py-8 px-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
+      <header className="relative z-20 w-full py-8 px-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="w-12 h-12 bg-gradient-to-tr from-indigo-600 to-purple-700 rounded-2xl flex items-center justify-center text-white shadow-xl group-hover:rotate-12 transition-transform duration-300">
             <span className="font-black text-2xl">I</span>
@@ -50,7 +50,7 @@ const App = () => {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 flex-grow flex flex-col items-center px-4 py-8 md:py-16 w-full max-w-7xl mx-auto">
+      <main className="relative flex-grow flex flex-col items-center px-4 py-8 md:py-16 w-full max-w-7xl mx-auto">
 
         {/* Navigation Tabs - Refined Glass Style */}
         <div className="flex p-1.5 space-x-1 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl mb-16 shadow-lg border border-white/20 dark:border-slate-800">
@@ -121,7 +121,7 @@ const App = () => {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full py-8 text-center text-gray-500 dark:text-slate-500 text-sm border-t border-gray-200/50 dark:border-slate-800/50 mt-auto backdrop-blur-md">
+      <footer className="relative w-full py-8 text-center text-gray-500 dark:text-slate-500 text-sm border-t border-gray-200/50 dark:border-slate-800/50 mt-auto backdrop-blur-md">
         <p className="font-medium tracking-wide">© {new Date().getFullYear()} Inspiria. Crafted with precision & passion.</p>
       </footer>
     </div>
