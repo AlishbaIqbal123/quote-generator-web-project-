@@ -56,7 +56,12 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
         if (editorRef.current === null) return;
 
         try {
-            const dataUrl = await toPng(editorRef.current, { cacheBust: true, pixelRatio: 2 });
+            const dataUrl = await toPng(editorRef.current, {
+                pixelRatio: 1.5,
+                skipAutoScale: true,
+                canvasWidth: editorRef.current.clientWidth * 1.5,
+                canvasHeight: editorRef.current.clientHeight * 1.5
+            });
             download(dataUrl, `inspiria-edit-${imageId}.png`);
             toast.success('Image downloaded!');
         } catch (err) {

@@ -16,9 +16,12 @@ const ImageGallery = ({ images, loading, fetchImages, searchQuery, setSearchQuer
         toast.promise(
             (async () => {
                 try {
-                    await axios.get(img.links.download_location, {
+                    // Fire and forget tracking (don't await)
+                    axios.get(img.links.download_location, {
                         headers: { Authorization: `Client-ID 63bWwYPkkVI9cK-idE5Z6d-eTIWCXlzZB8Pm56nwIVg` }
                     }).catch(err => console.error("Tracking failed", err));
+
+                    // Start actual download immediately
 
                     const response = await fetch(img.urls.regular);
                     const blob = await response.blob();

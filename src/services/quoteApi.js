@@ -3,10 +3,10 @@ import axios from 'axios';
 // Fetch random quote from Quotable API (fast & CORS friendly)
 export const getQuote = async () => {
     try {
-        const response = await axios.get('https://api.quotable.io/random');
+        const response = await axios.get('https://dummyjson.com/quotes/random');
         const data = response.data;
         return {
-            text: data.content,
+            text: data.quote,
             author: data.author,
         };
     } catch (error) {
