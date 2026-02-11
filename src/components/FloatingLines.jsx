@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import {
-    Scene,
-    OrthographicCamera,
-    WebGLRenderer,
-    PlaneGeometry,
-    Mesh,
-    ShaderMaterial,
-    Vector3,
-    Vector2,
-    Clock
+  Scene,
+  OrthographicCamera,
+  WebGLRenderer,
+  PlaneGeometry,
+  Mesh,
+  ShaderMaterial,
+  Vector3,
+  Vector2,
+  Clock
 } from 'three';
 
 const vertexShader = `
@@ -99,7 +99,7 @@ vec3 getLineColor(float t, vec3 baseColor) {
   return gradientColor * 0.5;
 }
 
-  float wave(vec2 uv, float offset, vec2 screenUv, vec2 mouseUv, bool shouldBend) {
+float wave(vec2 uv, float offset, vec2 screenUv, vec2 mouseUv, bool shouldBend) {
   float time = iTime * animationSpeed;
 
   float x_offset   = offset;
@@ -144,8 +144,327 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
       float angle = bottomWavePosition.z * log(length(baseUv) + 1.0);
       vec2 ruv = baseUv * rotate(angle);
-      col += lineCol * wave(\n        ruv + vec2(bottomLineDistance * fi + bottomWavePosition.x, bottomWavePosition.y),\n        1.5 + 0.2 * fi,\n        baseUv,\n        mouseUv,\n        interactive\n      ) * 0.2;\n    }\n  }\n\n  if (enableMiddle) {\n    for (int i = 0; i < middleLineCount; ++i) {\n      float fi = float(i);\n      float t = fi / max(float(middleLineCount - 1), 1.0);\n      vec3 lineCol = getLineColor(t, b);\n\n      float angle = middleWavePosition.z * log(length(baseUv) + 1.0);\n      vec2 ruv = baseUv * rotate(angle);\n      col += lineCol * wave(\n        ruv + vec2(middleLineDistance * fi + middleWavePosition.x, middleWavePosition.y),\n        2.0 + 0.15 * fi,\n        baseUv,\n        mouseUv,\n        interactive\n      );\n    }\n  }\n\n  if (enableTop) {\n    for (int i = 0; i < topLineCount; ++i) {\n      float fi = float(i);\n      float t = fi / max(float(topLineCount - 1), 1.0);\n      vec3 lineCol = getLineColor(t, b);\n      float angle = topWavePosition.z * log(length(baseUv) + 1.0);\n      vec2 ruv = baseUv * rotate(angle);\n      ruv.x *= -1.0;\n      col += lineCol * wave(\n        ruv + vec2(topLineDistance * fi + topWavePosition.x, topWavePosition.y),\n        1.0 + 0.2 * fi,\n        baseUv,\n        mouseUv,\n        interactive\n      ) * 0.1;\n    }\n  }\n\n  fragColor = vec4(col, 1.0);\n}\n\nvoid main() {\n  vec4 color = vec4(0.0);\n  mainImage(color, gl_FragCoord.xy);\n  gl_FragColor = color;\n}\n`;
+      col += lineCol * wave(
+        ruv + vec2(bottomLineDistance * fi + bottomWavePosition.x, bottomWavePosition.y),
+        1.5 + 0.2 * fi,
+        baseUv,
+        mouseUv,
+        interactive
+      ) * 0.2;
+    }
+  }
+
+  if (enableMiddle) {
+    for (int i = 0; i < middleLineCount; ++i) {
+      float fi = float(i);
+      float t = fi / max(float(middleLineCount - 1), 1.0);
+      vec3 lineCol = getLineColor(t, b);
+
+      float angle = middleWavePosition.z * log(length(baseUv) + 1.0);
+      vec2 ruv = baseUv * rotate(angle);
+      col += lineCol * wave(
+        ruv + vec2(middleLineDistance * fi + middleWavePosition.x, middleWavePosition.y),
+        2.0 + 0.15 * fi,
+        baseUv,
+        mouseUv,
+        interactive
+      );
+    }
+  }
+
+  if (enableTop) {
+    for (int i = 0; i < topLineCount; ++i) {
+      float fi = float(i);
+      float t = fi / max(float(topLineCount - 1), 1.0);
+      vec3 lineCol = getLineColor(t, b);
+      float angle = topWavePosition.z * log(length(baseUv) + 1.0);
+      vec2 ruv = baseUv * rotate(angle);
+      ruv.x *= -1.0;
+      col += lineCol * wave(
+        ruv + vec2(topLineDistance * fi + topWavePosition.x, topWavePosition.y),
+        1.0 + 0.2 * fi,
+        baseUv,
+        mouseUv,
+        interactive
+      ) * 0.1;
+    }
+  }
+
+  fragColor = vec4(col, 1.0);
+}
+
+void main() {
+  vec4 color = vec4(0.0);
+  mainImage(color, gl_FragCoord.xy);
+  gl_FragColor = color;
+}
+`;
 
 const MAX_GRADIENT_STOPS = 8;
 
-function hexToVec3(hex) { \n  let value = hex.trim(); \n\n  if (value.startsWith('#')) { \n    value = value.slice(1); \n } \n\n  let r = 255; \n  let g = 255; \n  let b = 255; \n\n  if (value.length === 3) { \n    r = parseInt(value[0] + value[0], 16); \n    g = parseInt(value[1] + value[1], 16); \n    b = parseInt(value[2] + value[2], 16); \n } else if (value.length === 6) { \n    r = parseInt(value.slice(0, 2), 16); \n    g = parseInt(value.slice(2, 4), 16); \n    b = parseInt(value.slice(4, 6), 16); \n } \n\n  return new Vector3(r / 255, g / 255, b / 255); \n } \n\nexport default function FloatingLines({ \n  linesGradient = [\"#6366f1\", \"#a855f7\", \"#ec4899\"],\n  enabledWaves = ['top', 'middle', 'bottom'],\n  lineCount = [6, 6, 6],\n  lineDistance = [5, 5, 5],\n  topWavePosition,\n  middleWavePosition,\n  bottomWavePosition = { x: 2.0, y: -0.7, rotate: -1 },\n  animationSpeed = 1,\n  interactive = true,\n  bendRadius = 5.0,\n  bendStrength = -0.5,\n  mouseDamping = 0.05,\n  parallax = true,\n  parallaxStrength = 0.2,\n  mixBlendMode = 'screen'\n}) {\n  const containerRef = useRef(null);\n  const targetMouseRef = useRef(new Vector2(-1000, -1000));\n  const currentMouseRef = useRef(new Vector2(-1000, -1000));\n  const targetInfluenceRef = useRef(0);\n  const currentInfluenceRef = useRef(0);\n  const targetParallaxRef = useRef(new Vector2(0, 0));\n  const currentParallaxRef = useRef(new Vector2(0, 0));\n\n  const getLineCount = waveType => {\n    if (typeof lineCount === 'number') return lineCount;\n    if (!enabledWaves.includes(waveType)) return 0;\n    const index = enabledWaves.indexOf(waveType);\n    return lineCount[index] ?? 6;\n  };\n\n  const getLineDistance = waveType => {\n    if (typeof lineDistance === 'number') return lineDistance;\n    if (!enabledWaves.includes(waveType)) return 0.1;\n    const index = enabledWaves.indexOf(waveType);\n    return lineDistance[index] ?? 0.1;\n  };\n\n  const topLineCount = enabledWaves.includes('top') ? getLineCount('top') : 0;\n  const middleLineCount = enabledWaves.includes('middle') ? getLineCount('middle') : 0;\n  const bottomLineCount = enabledWaves.includes('bottom') ? getLineCount('bottom') : 0;\n\n  const topLineDistance = enabledWaves.includes('top') ? getLineDistance('top') * 0.01 : 0.01;\n  const middleLineDistance = enabledWaves.includes('middle') ? getLineDistance('middle') * 0.01 : 0.01;\n  const bottomLineDistance = enabledWaves.includes('bottom') ? getLineDistance('bottom') * 0.01 : 0.01;\n\n  useEffect(() => {\n    if (!containerRef.current) return;\n\n    const scene = new Scene();\n    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);\n    camera.position.z = 1;\n\n    const renderer = new WebGLRenderer({ antialias: true, alpha: true });\n    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));\n    renderer.domElement.style.width = '100%';\n    renderer.domElement.style.height = '100%';\n    containerRef.current.appendChild(renderer.domElement);\n\n    const uniforms = {\n      iTime: { value: 0 },\n      iResolution: { value: new Vector3(1, 1, 1) },\n      animationSpeed: { value: animationSpeed },\n\n      enableTop: { value: enabledWaves.includes('top') },\n      enableMiddle: { value: enabledWaves.includes('middle') },\n      enableBottom: { value: enabledWaves.includes('bottom') },\n\n      topLineCount: { value: topLineCount },\n      middleLineCount: { value: middleLineCount },\n      bottomLineCount: { value: bottomLineCount },\n\n      topLineDistance: { value: topLineDistance },\n      middleLineDistance: { value: middleLineDistance },\n      bottomLineDistance: { value: bottomLineDistance },\n\n      topWavePosition: {\n        value: new Vector3(topWavePosition?.x ?? 10.0, topWavePosition?.y ?? 0.5, topWavePosition?.rotate ?? -0.4)\n      },\n      middleWavePosition: {\n        value: new Vector3(\n          middleWavePosition?.x ?? 5.0,\n          middleWavePosition?.y ?? 0.0,\n          middleWavePosition?.rotate ?? 0.2\n        )\n      },\n      bottomWavePosition: {\n        value: new Vector3(\n          bottomWavePosition?.x ?? 2.0,\n          bottomWavePosition?.y ?? -0.7,\n          bottomWavePosition?.rotate ?? 0.4\n        )\n      },\n\n      iMouse: { value: new Vector2(-1000, -1000) },\n      interactive: { value: interactive },\n      bendRadius: { value: bendRadius },\n      bendStrength: { value: bendStrength },\n      bendInfluence: { value: 0 },\n\n      parallax: { value: parallax },\n      parallaxStrength: { value: parallaxStrength },\n      parallaxOffset: { value: new Vector2(0, 0) },\n\n      lineGradient: {\n        value: Array.from({ length: MAX_GRADIENT_STOPS }, () => new Vector3(1, 1, 1))\n      },\n      lineGradientCount: { value: 0 }\n    };\n\n    if (linesGradient && linesGradient.length > 0) {\n      const stops = linesGradient.slice(0, MAX_GRADIENT_STOPS);\n      uniforms.lineGradientCount.value = stops.length;\n\n      stops.forEach((hex, i) => {\n        const color = hexToVec3(hex);\n        uniforms.lineGradient.value[i].set(color.x, color.y, color.z);\n      });\n    }\n\n    const material = new ShaderMaterial({\n      uniforms,\n      vertexShader,\n      fragmentShader,\n      transparent: true\n    });\n\n    const geometry = new PlaneGeometry(2, 2);\n    const mesh = new Mesh(geometry, material);\n    scene.add(mesh);\n\n    const clock = new Clock();\n\n    const setSize = () => {\n      const el = containerRef.current;\n      if (!el) return;\n      const width = el.clientWidth || 1;\n      const height = el.clientHeight || 1;\n\n      renderer.setSize(width, height, false);\n\n      const canvasWidth = renderer.domElement.width;\n      const canvasHeight = renderer.domElement.height;\n      uniforms.iResolution.value.set(canvasWidth, canvasHeight, 1);\n    };\n\n    setSize();\n\n    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(setSize) : null;\n\n    if (ro && containerRef.current) {\n      ro.observe(containerRef.current);\n    }\n\n    const handlePointerMove = event => {\n      const rect = renderer.domElement.getBoundingClientRect();\n      const x = event.clientX - rect.left;\n      const y = event.clientY - rect.top;\n      const dpr = renderer.getPixelRatio();\n\n      targetMouseRef.current.set(x * dpr, (rect.height - y) * dpr);\n      targetInfluenceRef.current = 1.0;\n\n      if (parallax) {\n        const centerX = rect.width / 2;\n        const centerY = rect.height / 2;\n        const offsetX = (x - centerX) / rect.width;\n        const offsetY = -(y - centerY) / rect.height;\n        targetParallaxRef.current.set(offsetX * parallaxStrength, offsetY * parallaxStrength);\n      }\n    };\n\n    const handlePointerLeave = () => {\n      targetInfluenceRef.current = 0.0;\n    };\n\n    if (interactive) {\n      renderer.domElement.addEventListener('pointermove', handlePointerMove);\n      renderer.domElement.addEventListener('pointerleave', handlePointerLeave);\n    }\n\n    let raf = 0;\n    const renderLoop = () => {\n      uniforms.iTime.value = clock.getElapsedTime();\n\n      if (interactive) {\n        currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);\n        uniforms.iMouse.value.copy(currentMouseRef.current);\n\n        currentInfluenceRef.current += (targetInfluenceRef.current - currentInfluenceRef.current) * mouseDamping;\n        uniforms.bendInfluence.value = currentInfluenceRef.current;\n      }\n\n      if (parallax) {\n        currentParallaxRef.current.lerp(targetParallaxRef.current, mouseDamping);\n        uniforms.parallaxOffset.value.copy(currentParallaxRef.current);\n      }\n\n      renderer.render(scene, camera);\n      raf = requestAnimationFrame(renderLoop);\n    };\n    renderLoop();\n\n    return () => {\n      cancelAnimationFrame(raf);\n      if (ro && containerRef.current) {\n        ro.disconnect();\n      }\n\n      if (interactive) {\n        renderer.domElement?.removeEventListener('pointermove', handlePointerMove);\n        renderer.domElement?.removeEventListener('pointerleave', handlePointerLeave);\n      }\n\n      geometry.dispose();\n      material.dispose();\n      renderer.dispose();\n      if (renderer.domElement.parentElement) {\n        renderer.domElement.parentElement.removeChild(renderer.domElement);\n      }\n    };\n  }, [linesGradient, enabledWaves, lineCount, lineDistance, topWavePosition, middleWavePosition, bottomWavePosition, animationSpeed, interactive, bendRadius, bendStrength, mouseDamping, parallax, parallaxStrength]);\n\n  return (\n    <div\n      ref={containerRef}\n      className=\"floating-lines-container\"\n      style={{\n        position: 'absolute',\n        top: 0,\n        left: 0,\n        width: '100%',\n        height: '100%',\n        overflow: 'hidden',\n        zIndex: -1,\n        mixBlendMode: mixBlendMode\n      }}\n    />\n  );\n}\n
+function hexToVec3(hex) {
+  let value = hex.trim();
+
+  if (value.startsWith('#')) {
+    value = value.slice(1);
+  }
+
+  let r = 255;
+  let g = 255;
+  let b = 255;
+
+  if (value.length === 3) {
+    r = parseInt(value[0] + value[0], 16);
+    g = parseInt(value[1] + value[1], 16);
+    b = parseInt(value[2] + value[2], 16);
+  } else if (value.length === 6) {
+    r = parseInt(value.slice(0, 2), 16);
+    g = parseInt(value.slice(2, 4), 16);
+    b = parseInt(value.slice(4, 6), 16);
+  }
+
+  return new Vector3(r / 255, g / 255, b / 255);
+}
+
+export default function FloatingLines({
+  linesGradient = ["#6366f1", "#a855f7", "#ec4899"],
+  enabledWaves = ['top', 'middle', 'bottom'],
+  lineCount = [6, 6, 6],
+  lineDistance = [5, 5, 5],
+  topWavePosition,
+  middleWavePosition,
+  bottomWavePosition = { x: 2.0, y: -0.7, rotate: -1 },
+  animationSpeed = 1,
+  interactive = true,
+  bendRadius = 5.0,
+  bendStrength = -0.5,
+  mouseDamping = 0.05,
+  parallax = true,
+  parallaxStrength = 0.2,
+  mixBlendMode = 'screen'
+}) {
+  const containerRef = useRef(null);
+  const targetMouseRef = useRef(new Vector2(-1000, -1000));
+  const currentMouseRef = useRef(new Vector2(-1000, -1000));
+  const targetInfluenceRef = useRef(0);
+  const currentInfluenceRef = useRef(0);
+  const targetParallaxRef = useRef(new Vector2(0, 0));
+  const currentParallaxRef = useRef(new Vector2(0, 0));
+
+  const getLineCount = waveType => {
+    if (typeof lineCount === 'number') return lineCount;
+    if (!enabledWaves.includes(waveType)) return 0;
+    const index = enabledWaves.indexOf(waveType);
+    return lineCount[index] ?? 6;
+  };
+
+  const getLineDistance = waveType => {
+    if (typeof lineDistance === 'number') return lineDistance;
+    if (!enabledWaves.includes(waveType)) return 0.1;
+    const index = enabledWaves.indexOf(waveType);
+    return lineDistance[index] ?? 0.1;
+  };
+
+  const topLineCount = enabledWaves.includes('top') ? getLineCount('top') : 0;
+  const middleLineCount = enabledWaves.includes('middle') ? getLineCount('middle') : 0;
+  const bottomLineCount = enabledWaves.includes('bottom') ? getLineCount('bottom') : 0;
+
+  const topLineDistance = enabledWaves.includes('top') ? getLineDistance('top') * 0.01 : 0.01;
+  const middleLineDistance = enabledWaves.includes('middle') ? getLineDistance('middle') * 0.01 : 0.01;
+  const bottomLineDistance = enabledWaves.includes('bottom') ? getLineDistance('bottom') * 0.01 : 0.01;
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const scene = new Scene();
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    camera.position.z = 1;
+
+    const renderer = new WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+    containerRef.current.appendChild(renderer.domElement);
+
+    const uniforms = {
+      iTime: { value: 0 },
+      iResolution: { value: new Vector3(1, 1, 1) },
+      animationSpeed: { value: animationSpeed },
+
+      enableTop: { value: enabledWaves.includes('top') },
+      enableMiddle: { value: enabledWaves.includes('middle') },
+      enableBottom: { value: enabledWaves.includes('bottom') },
+
+      topLineCount: { value: topLineCount },
+      middleLineCount: { value: middleLineCount },
+      bottomLineCount: { value: bottomLineCount },
+
+      topLineDistance: { value: topLineDistance },
+      middleLineDistance: { value: middleLineDistance },
+      bottomLineDistance: { value: bottomLineDistance },
+
+      topWavePosition: {
+        value: new Vector3(topWavePosition?.x ?? 10.0, topWavePosition?.y ?? 0.5, topWavePosition?.rotate ?? -0.4)
+      },
+      middleWavePosition: {
+        value: new Vector3(
+          middleWavePosition?.x ?? 5.0,
+          middleWavePosition?.y ?? 0.0,
+          middleWavePosition?.rotate ?? 0.2
+        )
+      },
+      bottomWavePosition: {
+        value: new Vector3(
+          bottomWavePosition?.x ?? 2.0,
+          bottomWavePosition?.y ?? -0.7,
+          bottomWavePosition?.rotate ?? 0.4
+        )
+      },
+
+      iMouse: { value: new Vector2(-1000, -1000) },
+      interactive: { value: interactive },
+      bendRadius: { value: bendRadius },
+      bendStrength: { value: bendStrength },
+      bendInfluence: { value: 0 },
+
+      parallax: { value: parallax },
+      parallaxStrength: { value: parallaxStrength },
+      parallaxOffset: { value: new Vector2(0, 0) },
+
+      lineGradient: {
+        value: Array.from({ length: MAX_GRADIENT_STOPS }, () => new Vector3(1, 1, 1))
+      },
+      lineGradientCount: { value: 0 }
+    };
+
+    if (linesGradient && linesGradient.length > 0) {
+      const stops = linesGradient.slice(0, MAX_GRADIENT_STOPS);
+      uniforms.lineGradientCount.value = stops.length;
+
+      stops.forEach((hex, i) => {
+        const color = hexToVec3(hex);
+        uniforms.lineGradient.value[i].set(color.x, color.y, color.z);
+      });
+    }
+
+    const material = new ShaderMaterial({
+      uniforms,
+      vertexShader,
+      fragmentShader,
+      transparent: true
+    });
+
+    const geometry = new PlaneGeometry(2, 2);
+    const mesh = new Mesh(geometry, material);
+    scene.add(mesh);
+
+    const clock = new Clock();
+
+    const setSize = () => {
+      const el = containerRef.current;
+      if (!el) return;
+      const width = el.clientWidth || 1;
+      const height = el.clientHeight || 1;
+
+      renderer.setSize(width, height, false);
+
+      const canvasWidth = renderer.domElement.width;
+      const canvasHeight = renderer.domElement.height;
+      uniforms.iResolution.value.set(canvasWidth, canvasHeight, 1);
+    };
+
+    setSize();
+
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(setSize) : null;
+
+    if (ro && containerRef.current) {
+      ro.observe(containerRef.current);
+    }
+
+    const handlePointerMove = event => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const dpr = renderer.getPixelRatio();
+
+      targetMouseRef.current.set(x * dpr, (rect.height - y) * dpr);
+      targetInfluenceRef.current = 1.0;
+
+      if (parallax) {
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const offsetX = (x - centerX) / rect.width;
+        const offsetY = -(y - centerY) / rect.height;
+        targetParallaxRef.current.set(offsetX * parallaxStrength, offsetY * parallaxStrength);
+      }
+    };
+
+    const handlePointerLeave = () => {
+      targetInfluenceRef.current = 0.0;
+    };
+
+    if (interactive) {
+      renderer.domElement.addEventListener('pointermove', handlePointerMove);
+      renderer.domElement.addEventListener('pointerleave', handlePointerLeave);
+    }
+
+    let raf = 0;
+    const renderLoop = () => {
+      uniforms.iTime.value = clock.getElapsedTime();
+
+      if (interactive) {
+        currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
+        uniforms.iMouse.value.copy(currentMouseRef.current);
+
+        currentInfluenceRef.current += (targetInfluenceRef.current - currentInfluenceRef.current) * mouseDamping;
+        uniforms.bendInfluence.value = currentInfluenceRef.current;
+      }
+
+      if (parallax) {
+        currentParallaxRef.current.lerp(targetParallaxRef.current, mouseDamping);
+        uniforms.parallaxOffset.value.copy(currentParallaxRef.current);
+      }
+
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(renderLoop);
+    };
+    renderLoop();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (ro && containerRef.current) {
+        ro.disconnect();
+      }
+
+      if (interactive) {
+        renderer.domElement?.removeEventListener('pointermove', handlePointerMove);
+        renderer.domElement?.removeEventListener('pointerleave', handlePointerLeave);
+      }
+
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+      if (renderer.domElement.parentElement) {
+        renderer.domElement.parentElement.removeChild(renderer.domElement);
+      }
+    };
+  }, [linesGradient, enabledWaves, lineCount, lineDistance, topWavePosition, middleWavePosition, bottomWavePosition, animationSpeed, interactive, bendRadius, bendStrength, mouseDamping, parallax, parallaxStrength]);
+
+  return (
+    <div
+      ref={containerRef}
+      className=\"floating-lines-container\"
+  style = {{
+    position: 'absolute',
+      top: 0,
+        left: 0,
+          width: '100%',
+            height: '100%',
+              overflow: 'hidden',
+                zIndex: -1,
+                  mixBlendMode: mixBlendMode
+  }
+}
+        />
+    );
+}
