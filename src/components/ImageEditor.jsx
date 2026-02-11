@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Download, X, Move, RotateCcw, Type, Bold, Italic } from 'lucide-react';
+import { Download, X, Move, RotateCcw, Type, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import download from 'downloadjs';
 import toast from 'react-hot-toast';
