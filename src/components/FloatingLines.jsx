@@ -453,18 +453,17 @@ export default function FloatingLines({
   return (
     <div
       ref={containerRef}
-      className=\"floating-lines-container\"
-  style = {{
-    position: 'absolute',
-      top: 0,
+      className="floating-lines-container"
+      style={{
+        position: 'absolute',
+        top: 0,
         left: 0,
-          width: '100%',
-            height: '100%',
-              overflow: 'hidden',
-                zIndex: -1,
-                  mixBlendMode: mixBlendMode
-  }
-}
-        />
-    );
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        zIndex: -1,
+        mixBlendMode: mixBlendMode
+      }}
+    />
+  );
 }
