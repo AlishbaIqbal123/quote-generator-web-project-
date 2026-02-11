@@ -4,15 +4,18 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
+import ImageEditor from './ImageEditor';
+
 const ImageGallery = ({ images, loading, fetchImages, searchQuery, setSearchQuery }) => {
     const [downloading, setDownloading] = useState(null);
+    const [editingImage, setEditingImage] = useState(null);
 
     const handleDownload = async (img) => {
+        // ... (existing download logic)
         setDownloading(img.id);
         toast.promise(
             (async () => {
                 try {
-                    // Trigger Unsplash download tracking
                     await axios.get(img.links.download_location, {
                         headers: { Authorization: `Client-ID 63bWwYPkkVI9cK-idE5Z6d-eTIWCXlzZB8Pm56nwIVg` }
                     }).catch(err => console.error("Tracking failed", err));
@@ -42,11 +45,19 @@ const ImageGallery = ({ images, loading, fetchImages, searchQuery, setSearchQuer
 
     return (
         <div className="w-full relative z-10 transition-colors animate-fade-in px-4">
+            {editingImage && (
+                <ImageEditor
+                    image={editingImage}
+                    onClose={() => setEditingImage(null)}
+                />
+            )}
+
             {/* Search Bar */}
             <form
                 onSubmit={(e) => { e.preventDefault(); fetchImages(); }}
                 className="max-w-xl mx-auto mb-10 relative flex items-center"
             >
+                {/* ... (existing search bar code) */}
                 <div className="relative w-full">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                         <Search size={20} />
@@ -82,7 +93,8 @@ const ImageGallery = ({ images, loading, fetchImages, searchQuery, setSearchQuer
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             key={img.id}
-                            className="relative break-inside-avoid rounded-2xl overflow-hidden group shadow-md hover:shadow-2xl transition-shadow bg-slate-900"
+                            className="relative break-inside-avoid rounded-2xl overflow-hidden group shadow-md hover:shadow-2xl transition-shadow bg-slate-900 cursor-pointer"
+                            onClick={() => setEditingImage(img)}
                         >
                             <img
                                 src={img.urls.regular}
@@ -105,17 +117,27 @@ const ImageGallery = ({ images, loading, fetchImages, searchQuery, setSearchQuer
                                         </span>
                                     </div>
 
-                                    <button
-                                        onClick={() => handleDownload(img)}
-                                        disabled={downloading === img.id}
-                                        className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-lg backdrop-blur-sm transition-colors"
-                                    >
-                                        {downloading === img.id ? (
-                                            <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-                                        ) : (
-                                            <Download size={20} />
-                                        )}
-                                    </button>
+                                    <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                                        <button
+                                            onClick={() => setEditingImage(img)}
+                                            className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-lg backdrop-blur-sm transition-colors"
+                                            title="Edit Image"
+                                        >
+                                            <Camera size={20} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDownload(img)}
+                                            disabled={downloading === img.id}
+                                            className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-lg backdrop-blur-sm transition-colors"
+                                            title="Download Original"
+                                        >
+                                            {downloading === img.id ? (
+                                                <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
+                                            ) : (
+                                                <Download size={20} />
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </motion.div>
