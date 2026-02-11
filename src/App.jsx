@@ -70,44 +70,44 @@ const App = () => {
       <main className="relative flex-grow flex flex-col items-center px-4 py-8 md:py-16 w-full max-w-7xl mx-auto">
 
         {/* Navigation Tabs - Refined Glass Style */}
-        <div className="flex p-1.5 space-x-1 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl mb-16 shadow-lg border border-white/20 dark:border-slate-800">
+        <div className="flex p-1.5 space-x-1 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl mb-8 md:mb-16 shadow-lg border border-white/20 dark:border-slate-800 max-w-full overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveTab('quote')}
-            className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
+            className={`flex items-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none whitespace-nowrap
               ${activeTab === 'quote'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
                 : 'text-slate-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <Quote size={18} />
-            <span className="hidden sm:inline">Quote Generator</span>
-            <span className="sm:hidden">Quote</span>
+            <span className="hidden xs:inline">Quote Generator</span>
+            <span className="xs:hidden">Quote</span>
           </button>
 
           <button
             onClick={() => setActiveTab('gallery')}
-            className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
+            className={`flex items-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none whitespace-nowrap
               ${activeTab === 'gallery'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
                 : 'text-slate-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <ImageIcon size={18} />
-            <span className="hidden sm:inline">Image Gallery</span>
-            <span className="sm:hidden">Gallery</span>
+            <span className="hidden xs:inline">Image Gallery</span>
+            <span className="xs:hidden">Gallery</span>
           </button>
 
           <button
             onClick={() => setActiveTab('studio')}
-            className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
+            className={`flex items-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none whitespace-nowrap
               ${activeTab === 'studio'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
                 : 'text-slate-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <Sparkles size={18} />
-            <span className="hidden sm:inline">Design Studio</span>
-            <span className="sm:hidden">Studio</span>
+            <span className="hidden xs:inline">Design Studio</span>
+            <span className="xs:hidden">Studio</span>
           </button>
         </div>
 

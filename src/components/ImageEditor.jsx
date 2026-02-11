@@ -84,8 +84,8 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
     const filterString = `grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) brightness(${filters.brightness}%) contrast(${filters.contrast}%) blur(${filters.blur}px)`;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in">
-            <div className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4 bg-black/90 backdrop-blur-md animate-fade-in">
+            <div className="bg-white dark:bg-slate-900 sm:rounded-3xl overflow-hidden shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-full lg:h-[90vh]">
 
                 {/* Preview Area */}
                 <div className="relative flex-1 bg-neutral-900 flex items-center justify-center overflow-hidden p-8">
@@ -138,7 +138,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                 </div>
 
                 {/* Controls Sidebar */}
-                <div className="w-full lg:w-96 bg-gray-50 dark:bg-slate-800 p-6 flex flex-col border-l dark:border-slate-700 overflow-y-auto">
+                <div className="w-full lg:w-[400px] bg-gray-50 dark:bg-slate-800 p-4 sm:p-6 lg:p-8 flex flex-col border-t lg:border-t-0 lg:border-l dark:border-slate-700 overflow-y-auto">
                     <div className="flex justify-between items-center mb-6">
                         <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                             Studio Editor
