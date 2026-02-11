@@ -1,39 +1,16 @@
-# Inspiria | Premium Quote Generator 🌟
+# React + Vite
 
-Inspiria is a beautifully crafted, modern web application designed to provide daily doses of inspiration. Built with a focus on aesthetics and user experience, it features a glassmorphic UI, smooth animations, and seamless social integration.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-![Inspiria Preview](https://github.com/AlishbaIqbal123/quote-generator-web-project-/raw/main/preview.png) *(Placeholder - Image will be visible once pushed)*
+Currently, two official plugins are available:
 
-## ✨ Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- **Dynamic Fetching**: Get fresh, inspiring quotes from the ZenQuotes API.
-- **Glassmorphic UI**: A premium design with depth, blur, and vibrant gradients.
-- **Copy to Clipboard**: Easily copy your favorite quotes with a single click.
-- **Social Sharing**: Share quotes directly to X (Twitter) or WhatsApp.
-- **Responsive Design**: Optimized for all devices, from desktops to mobile phones.
-- **Fallback Content**: Integrated local quote database ensures it works even without an internet connection.
+## React Compiler
 
-## 🚀 Tech Stack
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- **HTML5**: Semantic structure and SEO optimization.
-- **CSS3**: Custom properties, Flexbox, Glassmorphism, and keyframe animations.
-- **JavaScript**: Async/Await for API integration and DOM manipulation.
-- **Font Awesome**: Elegant icons for better interactivity.
-- **Google Fonts**: Modern typography (Outfit & Playfair Display).
+## Expanding the ESLint configuration
 
-## 🛠️ Installation
-
-Simply clone the repository and open `index.html` in your browser:
-
-```bash
-git clone https://github.com/AlishbaIqbal123/quote-generator-web-project-.git
-cd quote-generator-web-project-
-# Open index.html
-```
-
-## 📝 License
-
-This project is developed as part of the **Internee.pk** web development internship program. 
-
----
-Developed with ❤️ by [Alishba Iqbal](https://github.com/AlishbaIqbal123)
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
