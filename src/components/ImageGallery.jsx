@@ -54,7 +54,7 @@ const ImageGallery = ({ images, loading, fetchImages, searchQuery, setSearchQuer
 
             {/* Search Bar */}
             <form
-                onSubmit={(e) => { e.preventDefault(); fetchImages(); }}
+                onSubmit={(e) => { e.preventDefault(); fetchImages(searchQuery); }}
                 className="max-w-xl mx-auto mb-10 relative flex items-center"
             >
                 {/* ... (existing search bar code) */}
