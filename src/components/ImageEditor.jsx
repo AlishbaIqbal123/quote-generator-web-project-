@@ -88,7 +88,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
             <div className="bg-white dark:bg-slate-900 sm:rounded-3xl overflow-hidden shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-full lg:h-[90vh]">
 
                 {/* Preview Area */}
-                <div className="relative flex-1 bg-neutral-900 flex items-center justify-center overflow-hidden p-8">
+                <div className="relative flex-[0_0_50%] lg:flex-1 bg-neutral-900 flex items-center justify-center overflow-hidden p-4 sm:p-8 min-h-[50vh] lg:min-h-0">
                     <div
                         ref={editorRef}
                         className="relative inline-block shadow-2xl overflow-hidden"
@@ -97,7 +97,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                         <img
                             src={imageSource}
                             alt="Editor preview"
-                            className="max-h-[80vh] w-auto block object-contain pointer-events-none select-none"
+                            className="max-h-[45vh] lg:max-h-[80vh] w-auto block object-contain pointer-events-none select-none"
                             crossOrigin="anonymous"
                             style={{ filter: filterString }}
                         />
