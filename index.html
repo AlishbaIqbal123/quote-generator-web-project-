@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A premium, elegant Quote Generator that provides daily inspiration with a beautiful glassmorphic UI. Generate, copy, and share your favorite quotes effortlessly.">
+    <title>Inspiria | Premium Quote Generator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1 id="main-title">Inspiria</h1>
+            <p class="subtitle">Elevate your mind, one quote at its time.</p>
+        </header>
+
+        <section class="quote-box" id="quote-container">
+            <div class="quote-content">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <p id="quote-text" class="quote-text">Click the button below to generate a masterpiece of thought.</p>
+                <div class="quote-author-wrapper">
+                    <span class="dash"></span>
+                    <p id="quote-author" class="quote-author">Inspiria Team</p>
+                </div>
+            </div>
+
+            <div class="quote-actions">
+                <div class="utility-btns">
+                    <button id="copy-btn" class="action-btn" title="Copy to Clipboard">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button id="twitter-btn" class="action-btn" title="Share on X (Twitter)">
+                        <i class="fab fa-x-twitter"></i>
+                    </button>
+                    <button id="whatsapp-btn" class="action-btn" title="Share on WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
+                </div>
+                
+                <button id="new-quote-btn" class="main-btn">
+                    <span>New Quote</span>
+                    <i class="fas fa-random"></i>
+                </button>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Inspiria. Designed with ❤️ for <a href="https://internee.pk" target="_blank">Internee.pk</a></p>
+        </footer>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Quote copied to clipboard!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
