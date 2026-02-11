@@ -151,7 +151,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                     <div className="space-y-8 pb-20">
                         {/* Text Controls */}
                         <div className="space-y-4">
-                            <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Typography</h4>
+                            <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Typography</h4>
 
                             <textarea
                                 value={text}
@@ -163,7 +163,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
 
                             {/* Font Family Selector */}
                             <div>
-                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Font Family</label>
+                                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">Font Family</label>
                                 <select
                                     value={textStyle.fontFamily}
                                     onChange={(e) => updateStyle('fontFamily', e.target.value)}
@@ -235,7 +235,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
 
                             {/* Letter Spacing Slider */}
                             <div>
-                                <label className="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                <label className="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
                                     <span>Letter Spacing</span>
                                     <span>{textStyle.letterSpacing}px</span>
                                 </label>
@@ -251,7 +251,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
 
                             {/* Font Size Slider */}
                             <div>
-                                <label className="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                <label className="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
                                     <span>Size</span>
                                     <span>{textStyle.fontSize}px</span>
                                 </label>
@@ -267,7 +267,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
 
                             {/* Color Picker */}
                             <div>
-                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Text Color</label>
+                                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-2">Text Color</label>
                                 <div className="flex flex-wrap gap-2">
                                     {['#ffffff', '#000000', '#f87171', '#fbbf24', '#4ade80', '#60a5fa', '#a78bfa', '#f472b6'].map((c) => (
                                         <button
@@ -293,7 +293,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                         {/* Filter Controls */}
                         <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
                             <div className="flex justify-between items-center">
-                                <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Image Filters</h4>
+                                <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Image Filters</h4>
                                 <button onClick={resetFilters} className="text-xs text-indigo-500 hover:text-indigo-400 flex items-center gap-1">
                                     <RotateCcw size={12} /> Reset
                                 </button>
@@ -305,7 +305,7 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                                 { label: 'Grayscale', key: 'grayscale', min: 0, max: 100 },
                             ].map((f) => (
                                 <div key={f.key}>
-                                    <label className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                                    <label className="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
                                         <span>{f.label}</span>
                                         <span>{filters[f.key]}%</span>
                                     </label>

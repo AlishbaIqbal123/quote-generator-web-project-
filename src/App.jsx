@@ -76,7 +76,7 @@ const App = () => {
             className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'quote'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                : 'text-slate-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <Quote size={18} />
@@ -89,7 +89,7 @@ const App = () => {
             className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'gallery'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                : 'text-slate-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <ImageIcon size={18} />
@@ -102,7 +102,7 @@ const App = () => {
             className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'studio'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                : 'text-slate-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <Sparkles size={18} />
@@ -138,7 +138,7 @@ const App = () => {
       </main>
 
       {/* Footer */}
-      <footer className="relative w-full py-8 text-center text-gray-500 dark:text-slate-500 text-sm border-t border-gray-200/50 dark:border-slate-800/50 mt-auto backdrop-blur-md">
+      <footer className="relative w-full py-8 text-center text-slate-600 dark:text-slate-500 text-sm border-t border-gray-200/50 dark:border-slate-800/50 mt-auto backdrop-blur-md">
         <p className="font-medium tracking-wide">© {new Date().getFullYear()} Inspiria. Crafted with precision & passion.</p>
       </footer>
     </div>

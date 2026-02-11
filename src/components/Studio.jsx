@@ -62,7 +62,7 @@ const Studio = () => {
                             <h2 className="text-4xl font-black text-gray-800 dark:text-white mb-4 tracking-tight">
                                 Creation <span className="text-indigo-600">Studio</span>
                             </h2>
-                            <p className="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+                            <p className="text-slate-600 dark:text-gray-400 max-w-lg mx-auto">
                                 Bring your own visuals to life. Upload an image and overlay it with powerful, inspiring words.
                             </p>
                         </div>
@@ -96,7 +96,7 @@ const Studio = () => {
                                 <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
                                     Drop your image here
                                 </h3>
-                                <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
+                                <p className="text-slate-600 dark:text-gray-400 text-sm mb-6">
                                     or click to browse from your device
                                 </p>
 
@@ -127,7 +127,7 @@ const Studio = () => {
                                         {tip.icon}
                                     </div>
                                     <h4 className="font-bold text-gray-800 dark:text-white mb-1">{tip.title}</h4>
-                                    <p className="text-gray-500 dark:text-gray-400 text-xs leading-relaxed">{tip.desc}</p>
+                                    <p className="text-slate-600 dark:text-gray-400 text-xs leading-relaxed">{tip.desc}</p>
                                 </div>
                             ))}
                         </div>

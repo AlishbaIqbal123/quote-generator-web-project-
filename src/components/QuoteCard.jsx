@@ -51,7 +51,7 @@ const QuoteCard = ({ quote, loading, fetchQuote }) => {
 
                         <div className="w-16 h-1 bg-indigo-500 rounded-full mb-6"></div>
 
-                        <cite className="font-outfit text-xl text-gray-500 dark:text-gray-400 font-semibold uppercase tracking-widest not-italic mb-10 block">
+                        <cite className="font-outfit text-xl text-slate-600 dark:text-gray-400 font-semibold uppercase tracking-widest not-italic mb-10 block">
                             — {quote.author}
                         </cite>
 
