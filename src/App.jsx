@@ -112,7 +112,7 @@ const App = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="w-full flex justify-center perspective-1000">
+        <div className="w-full flex justify-center">
           {activeTab === 'quote' && (
             <div className="w-full flex justify-center animate-fade-in">
               <QuoteCard

@@ -84,8 +84,8 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
     const filterString = `grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) brightness(${filters.brightness}%) contrast(${filters.contrast}%) blur(${filters.blur}px)`;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center sm:p-4 bg-black/90 backdrop-blur-md animate-fade-in">
-            <div className="bg-white dark:bg-slate-900 sm:rounded-3xl overflow-hidden shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-full lg:h-[90vh]">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center sm:p-4 bg-black/90 backdrop-blur-md animate-fade-in">
+            <div className="bg-white dark:bg-slate-900 sm:rounded-3xl overflow-hidden shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-full lg:h-[90vh] relative">
 
                 {/* Preview Area */}
                 <div className="relative flex-[0_0_50%] lg:flex-1 bg-neutral-900 flex items-center justify-center overflow-hidden p-4 sm:p-8 min-h-[50vh] lg:min-h-0">
@@ -143,7 +143,11 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                         <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
                             Studio Editor
                         </h3>
-                        <button onClick={onClose} className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full transition-colors">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full transition-colors relative z-10 cursor-pointer"
+                        >
                             <X size={20} />
                         </button>
                     </div>
