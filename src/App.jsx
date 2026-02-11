@@ -5,7 +5,7 @@ import { Quote, Image as ImageIcon, Search, Download, RefreshCw, Copy, Twitter, 
 import { Toaster, toast } from 'react-hot-toast';
 import './App.css';
 
-const UNSPLASH_ACCESS_KEY = 'YOUR_UNSPLASH_ACCESS_KEY'; // User should replace this
+const UNSPLASH_ACCESS_KEY = '63bWwYPkkVI9cK-idE5Z6d-eTIWCXlzZB8Pm56nwIVg'; // User should replace this
 
 function App() {
   const [activeTab, setActiveTab] = useState('quote');
