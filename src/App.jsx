@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Quote, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import useQuote from './hooks/useQuote';
 import useUnsplash from './hooks/useUnsplash';
 import QuoteCard from './components/QuoteCard';
@@ -141,6 +142,7 @@ const App = () => {
       <footer className="relative w-full py-8 text-center text-slate-600 dark:text-slate-500 text-sm border-t border-gray-200/50 dark:border-slate-800/50 mt-auto backdrop-blur-md">
         <p className="font-medium tracking-wide">© {new Date().getFullYear()} Inspiria. Crafted with precision & passion.</p>
       </footer>
+      <Analytics />
     </div>
   );
 };
