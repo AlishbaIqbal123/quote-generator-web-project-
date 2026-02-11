@@ -1,14 +1,30 @@
 import { useState, useRef } from 'react';
-import { Download, X, Move, RotateCcw } from 'lucide-react';
+import { Download, X, Move, RotateCcw, Type, Bold, Italic } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import download from 'downloadjs';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 
+const fonts = [
+    'Playfair Display',
+    'Outfit',
+    'Roboto',
+    'Inter',
+    'Dancing Script',
+    'Montserrat'
+];
+
 const ImageEditor = ({ image, onClose }) => {
     const [text, setText] = useState("Inspiration is everywhere.");
-    const [color, setColor] = useState("#ffffff");
-    const [fontSize, setFontSize] = useState(32);
+    const [textStyle, setTextStyle] = useState({
+        color: "#ffffff",
+        fontSize: 32,
+        fontFamily: 'Playfair Display',
+        fontWeight: 'bold',
+        fontStyle: 'normal',
+        textAlign: 'center'
+    });
+
     const [filters, setFilters] = useState({
         grayscale: 0,
         sepia: 0,
@@ -23,7 +39,6 @@ const ImageEditor = ({ image, onClose }) => {
         if (editorRef.current === null) return;
 
         try {
-            // Temporarily scale up for better resolution if needed, but standard capture works well
             const dataUrl = await toPng(editorRef.current, { cacheBust: true, pixelRatio: 2 });
             download(dataUrl, `inspiria-edit-${image.id}.png`);
             toast.success('Image downloaded!');
@@ -31,6 +46,10 @@ const ImageEditor = ({ image, onClose }) => {
             console.error(err);
             toast.error('Failed to generate image. Try again.');
         }
+    };
+
+    const updateStyle = (key, value) => {
+        setTextStyle(prev => ({ ...prev, [key]: value }));
     };
 
     const handleFilterChange = (key, value) => {
@@ -79,10 +98,14 @@ const ImageEditor = ({ image, onClose }) => {
                                 contentEditable
                                 suppressContentEditableWarning
                                 onBlur={(e) => setText(e.currentTarget.textContent)}
-                                className="font-playfair font-bold text-center outline-none whitespace-pre-wrap"
+                                className="outline-none whitespace-pre-wrap select-none"
                                 style={{
-                                    color: color,
-                                    fontSize: `${fontSize}px`,
+                                    color: textStyle.color,
+                                    fontSize: `${textStyle.fontSize}px`,
+                                    fontFamily: textStyle.fontFamily,
+                                    fontWeight: textStyle.fontWeight,
+                                    fontStyle: textStyle.fontStyle,
+                                    textAlign: textStyle.textAlign,
                                     textShadow: '0 4px 8px rgba(0,0,0,0.8)',
                                     minWidth: '200px'
                                 }}
@@ -111,42 +134,92 @@ const ImageEditor = ({ image, onClose }) => {
                         {/* Text Controls */}
                         <div className="space-y-4">
                             <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Typography</h4>
+
+                            <textarea
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                className="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none text-sm font-outfit"
+                                rows="2"
+                                placeholder="Enter your quote..."
+                            />
+
+                            {/* Font Family Selector */}
                             <div>
-                                <textarea
-                                    value={text}
-                                    onChange={(e) => setText(e.target.value)}
-                                    className="w-full p-3 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none text-sm"
-                                    rows="2"
-                                    placeholder="Enter your quote..."
-                                />
+                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Font Family</label>
+                                <select
+                                    value={textStyle.fontFamily}
+                                    onChange={(e) => updateStyle('fontFamily', e.target.value)}
+                                    className="w-full p-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-800 dark:text-white text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                >
+                                    {fonts.map(font => (
+                                        <option key={font} value={font}>{font}</option>
+                                    ))}
+                                </select>
                             </div>
 
+                            {/* Font Style Buttons */}
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => updateStyle('fontWeight', textStyle.fontWeight === 'bold' ? 'normal' : 'bold')}
+                                    className={`p-2 rounded-lg border ${textStyle.fontWeight === 'bold' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                    title="Bold"
+                                >
+                                    <Bold size={18} />
+                                </button>
+                                <button
+                                    onClick={() => updateStyle('fontStyle', textStyle.fontStyle === 'italic' ? 'normal' : 'italic')}
+                                    className={`p-2 rounded-lg border ${textStyle.fontStyle === 'italic' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                    title="Italic"
+                                >
+                                    <Italic size={18} />
+                                </button>
+                                {/* Alignment (Simple Toggle for now, can be expanded) */}
+                                <button
+                                    onClick={() => updateStyle('textAlign', textStyle.textAlign === 'center' ? 'left' : textStyle.textAlign === 'left' ? 'right' : 'center')}
+                                    className="p-2 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400 font-mono text-xs w-10"
+                                    title="Text Align"
+                                >
+                                    {textStyle.textAlign === 'center' ? 'ctr' : textStyle.textAlign === 'left' ? 'lft' : 'rgt'}
+                                </button>
+                            </div>
+
+                            {/* Font Size Slider */}
                             <div>
-                                <label className="flex justify-between text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <label className="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
                                     <span>Size</span>
-                                    <span>{fontSize}px</span>
+                                    <span>{textStyle.fontSize}px</span>
                                 </label>
                                 <input
                                     type="range"
-                                    min="20"
-                                    max="100"
-                                    value={fontSize}
-                                    onChange={(e) => setFontSize(parseInt(e.target.value))}
+                                    min="16"
+                                    max="120"
+                                    value={textStyle.fontSize}
+                                    onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
                                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-indigo-600"
                                 />
                             </div>
 
+                            {/* Color Picker */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Color</label>
+                                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Text Color</label>
                                 <div className="flex flex-wrap gap-2">
                                     {['#ffffff', '#000000', '#f87171', '#fbbf24', '#4ade80', '#60a5fa', '#a78bfa', '#f472b6'].map((c) => (
                                         <button
                                             key={c}
-                                            onClick={() => setColor(c)}
-                                            className={`w-8 h-8 rounded-full border-2 ${color === c ? 'border-indigo-500 scale-110' : 'border-gray-200 dark:border-slate-600 hover:scale-105'} transition-all shadow-sm`}
+                                            onClick={() => updateStyle('color', c)}
+                                            className={`w-8 h-8 rounded-full border-2 ${textStyle.color === c ? 'border-indigo-500 scale-110' : 'border-gray-200 dark:border-slate-600 hover:scale-105'} transition-all shadow-sm`}
                                             style={{ backgroundColor: c }}
                                         />
                                     ))}
+                                    {/* Custom Color Picker Input */}
+                                    <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 dark:border-slate-600 cursor-pointer">
+                                        <input
+                                            type="color"
+                                            value={textStyle.color}
+                                            onChange={(e) => updateStyle('color', e.target.value)}
+                                            className="absolute inset-0 w-[150%] h-[150%] -top-[25%] -left-[25%] cursor-pointer p-0 border-0"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +227,7 @@ const ImageEditor = ({ image, onClose }) => {
                         {/* Filter Controls */}
                         <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
                             <div className="flex justify-between items-center">
-                                <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Filters</h4>
+                                <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Image Filters</h4>
                                 <button onClick={resetFilters} className="text-xs text-indigo-500 hover:text-indigo-400 flex items-center gap-1">
                                     <RotateCcw size={12} /> Reset
                                 </button>
@@ -164,13 +237,11 @@ const ImageEditor = ({ image, onClose }) => {
                                 { label: 'Brightness', key: 'brightness', min: 0, max: 200 },
                                 { label: 'Contrast', key: 'contrast', min: 0, max: 200 },
                                 { label: 'Grayscale', key: 'grayscale', min: 0, max: 100 },
-                                { label: 'Sepia', key: 'sepia', min: 0, max: 100 },
-                                { label: 'Blur', key: 'blur', min: 0, max: 10 }
                             ].map((f) => (
                                 <div key={f.key}>
                                     <label className="flex justify-between text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
                                         <span>{f.label}</span>
-                                        <span>{filters[f.key]}{f.key === 'blur' ? 'px' : '%'}</span>
+                                        <span>{filters[f.key]}%</span>
                                     </label>
                                     <input
                                         type="range"
