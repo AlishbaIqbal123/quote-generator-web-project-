@@ -6,6 +6,7 @@ import useUnsplash from './hooks/useUnsplash';
 import QuoteCard from './components/QuoteCard';
 import ImageGallery from './components/ImageGallery';
 import ThemeToggle from './components/ThemeToggle';
+import UserGuide from './components/UserGuide';
 
 const App = () => {
   // State for active tab (Quote vs Gallery) to manage UI switching
@@ -22,6 +23,7 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300 font-outfit flex flex-col">
+      <UserGuide />
       <Toaster position="bottom-center" toastOptions={{
         className: 'dark:bg-slate-800 dark:text-white',
         style: { borderRadius: '10px', background: '#333', color: '#fff' },
