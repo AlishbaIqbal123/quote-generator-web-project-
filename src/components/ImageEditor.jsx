@@ -6,12 +6,21 @@ import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
 
 const fonts = [
-    'Playfair Display',
-    'Outfit',
-    'Roboto',
-    'Inter',
-    'Dancing Script',
-    'Montserrat'
+    'Playfair Display', // Elegant Serif
+    'Merriweather',     // Classic Serif
+    'Cinzel',           // Trajan-style for drama
+    'Roboto',           // Modern Sans
+    'Montserrat',       // Geometric Sans
+    'Open Sans',        // Humanist Sans
+    'Oswald',           // Condensed Sans for headlines
+    'Outfit',           // Rounded, friendly
+    'Dancing Script',   // Smooth Handwriting
+    'Great Vibes',      // Fancy Calligraphy
+    'Pacifico',         // Brush Script
+    'Lobster',          // Bold Script
+    'Abril Fatface',    // Heavy Display
+    'Righteous',        // Retro-futuristic
+    'Space Mono'        // Typewriter style
 ];
 
 const ImageEditor = ({ image, onClose }) => {
