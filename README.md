@@ -11,17 +11,12 @@
 ## 📸 Visual Showcase
 
 ### Screen Recording / Demo
-> [!TIP]
-> **[Click here to watch the full project walkthrough (Replace with your link)]**
-> 
-> *Example Layout: [![Inspiria Demo Video](https://img.shields.io/badge/Watch-Video_Demo-red?style=for-the-badge&logo=youtube)](YOUR_VIDEO_LINK_HERE)*
 
-### Screenshots
-| Landing Page | Design Studio | Image Gallery |
-| :---: | :---: | :---: |
-| ![Landing Page Preview](https://via.placeholder.com/800x450.png?text=Inspiria+Landing+Page) | ![Design Studio Preview](https://via.placeholder.com/800x450.png?text=Studio+Editor+Interface) | ![Gallery Preview](https://via.placeholder.com/800x450.png?text=Unsplash+Gallery+Search) |
-| *Premium Glassmorphism & Animated Backgrounds* | *Advanced Typography & Image Pro-Filters* | *High-Definition Image Search & Curation* |
 
+https://github.com/user-attachments/assets/297b752f-4abe-4108-bc32-f3fc9539400e
+
+
+  
 ---
 
 ## 🎨 Creative Philosophy
