@@ -23,6 +23,8 @@ const fonts = [
     'Space Mono'        // Typewriter style
 ];
 
+import { createPortal } from 'react-dom';
+
 const ImageEditor = ({ image, onClose, customImageSource }) => {
     const imageSource = customImageSource || image?.urls?.regular;
     const imageId = image?.id || 'custom-' + Math.random().toString(36).substr(2, 9);
@@ -83,9 +85,9 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
 
     const filterString = `grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) brightness(${filters.brightness}%) contrast(${filters.contrast}%) blur(${filters.blur}px)`;
 
-    return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center sm:p-4 bg-black/90 backdrop-blur-md animate-fade-in">
-            <div className="bg-white dark:bg-slate-900 sm:rounded-3xl overflow-hidden shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-full lg:h-[90vh] relative">
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center sm:p-4 bg-black/90 backdrop-blur-md animate-fade-in overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 sm:rounded-3xl shadow-2xl w-full max-w-6xl flex flex-col lg:flex-row h-full lg:h-[90vh] relative overflow-hidden">
 
                 {/* Preview Area */}
                 <div className="relative flex-[0_0_50%] lg:flex-1 bg-neutral-900 flex items-center justify-center overflow-hidden p-4 sm:p-8 min-h-[50vh] lg:min-h-0">
@@ -146,14 +148,14 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full transition-colors relative z-10 cursor-pointer"
+                            className="p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full transition-colors relative z-10 cursor-pointer text-gray-800 dark:text-white"
                         >
                             <X size={20} />
                         </button>
                     </div>
 
                     <div className="space-y-8 pb-20">
-                        {/* Text Controls */}
+                        {/* Text Controls ... (keeping previous logic) */}
                         <div className="space-y-4">
                             <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Typography</h4>
 
@@ -337,7 +339,8 @@ const ImageEditor = ({ image, onClose, customImageSource }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
