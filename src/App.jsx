@@ -51,6 +51,10 @@ function App() {
   };
 
   useEffect(() => {
+    fetchQuote();
+  }, []);
+
+  useEffect(() => {
     if (activeTab === 'gallery') {
       fetchImages();
     }
