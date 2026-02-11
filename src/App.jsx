@@ -22,20 +22,26 @@ const App = () => {
   const { images, loading: imagesLoading, fetchImages } = useUnsplash('nature');
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300 font-outfit flex flex-col">
+    <div className="relative min-h-screen transition-colors duration-500 font-outfit overflow-hidden bg-slate-50 dark:bg-slate-950">
       <UserGuide />
+
+      {/* Animated Background Blobs */}
+      <div className="bg-blob blob-1"></div>
+      <div className="bg-blob blob-2"></div>
+      <div className="bg-blob blob-3"></div>
+
       <Toaster position="bottom-center" toastOptions={{
         className: 'dark:bg-slate-800 dark:text-white',
-        style: { borderRadius: '10px', background: '#333', color: '#fff' },
+        style: { borderRadius: '15px', background: '#333', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' },
       }} />
 
       {/* Header */}
-      <header className="w-full py-6 px-4 md:px-8 flex justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-            <span className="font-bold text-xl">I</span>
+      <header className="relative z-10 w-full py-8 px-6 md:px-12 flex justify-between items-center max-w-7xl mx-auto">
+        <div className="flex items-center gap-3 group cursor-pointer">
+          <div className="w-12 h-12 bg-gradient-to-tr from-indigo-600 to-purple-700 rounded-2xl flex items-center justify-center text-white shadow-xl group-hover:rotate-12 transition-transform duration-300">
+            <span className="font-black text-2xl">I</span>
           </div>
-          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
+          <h1 className="text-3xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
             Inspiria
           </h1>
         </div>
@@ -43,16 +49,16 @@ const App = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center px-4 py-8 md:py-12 w-full max-w-7xl mx-auto">
+      <main className="relative z-10 flex-grow flex flex-col items-center px-4 py-8 md:py-16 w-full max-w-7xl mx-auto">
 
-        {/* Navigation Tabs */}
-        <div className="flex p-1 space-x-1 bg-gray-200 dark:bg-slate-800 rounded-xl mb-12">
+        {/* Navigation Tabs - Refined Glass Style */}
+        <div className="flex p-1.5 space-x-1 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl mb-16 shadow-lg border border-white/20 dark:border-slate-800">
           <button
             onClick={() => setActiveTab('quote')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-medium leading-5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 ring-offset-2 ring-offset-gray-100 dark:ring-offset-slate-900 ring-indigo-500
+            className={`flex items-center gap-2 px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'quote'
-                ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-300'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <Quote size={18} />
@@ -61,10 +67,10 @@ const App = () => {
 
           <button
             onClick={() => setActiveTab('gallery')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-medium leading-5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 ring-offset-2 ring-offset-gray-100 dark:ring-offset-slate-900 ring-indigo-500
+            className={`flex items-center gap-2 px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'gallery'
-                ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-300'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <ImageIcon size={18} />
@@ -73,7 +79,7 @@ const App = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center perspective-1000">
           {activeTab === 'quote' ? (
             <div className="w-full flex justify-center animate-fade-in">
               <QuoteCard
@@ -95,8 +101,8 @@ const App = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-6 text-center text-gray-500 dark:text-slate-500 text-sm border-t border-gray-200 dark:border-slate-800 mt-auto">
-        <p>© {new Date().getFullYear()} Inspiria. Built with React & Tailwind CSS.</p>
+      <footer className="relative z-10 w-full py-8 text-center text-gray-500 dark:text-slate-500 text-sm border-t border-gray-200/50 dark:border-slate-800/50 mt-auto backdrop-blur-md">
+        <p className="font-medium tracking-wide">© {new Date().getFullYear()} Inspiria. Crafted with precision & passion.</p>
       </footer>
     </div>
   );
