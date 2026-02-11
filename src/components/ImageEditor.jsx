@@ -23,7 +23,10 @@ const fonts = [
     'Space Mono'        // Typewriter style
 ];
 
-const ImageEditor = ({ image, onClose }) => {
+const ImageEditor = ({ image, onClose, customImageSource }) => {
+    const imageSource = customImageSource || image?.urls?.regular;
+    const imageId = image?.id || 'custom-' + Math.random().toString(36).substr(2, 9);
+
     const [text, setText] = useState("Inspiration is everywhere.");
     const [textStyle, setTextStyle] = useState({
         color: "#ffffff",
@@ -52,7 +55,7 @@ const ImageEditor = ({ image, onClose }) => {
 
         try {
             const dataUrl = await toPng(editorRef.current, { cacheBust: true, pixelRatio: 2 });
-            download(dataUrl, `inspiria-edit-${image.id}.png`);
+            download(dataUrl, `inspiria-edit-${imageId}.png`);
             toast.success('Image downloaded!');
         } catch (err) {
             console.error(err);
@@ -92,7 +95,7 @@ const ImageEditor = ({ image, onClose }) => {
                         style={{ maxHeight: '100%', maxWidth: '100%' }}
                     >
                         <img
-                            src={image.urls.regular}
+                            src={imageSource}
                             alt="Editor preview"
                             className="max-h-[80vh] w-auto block object-contain pointer-events-none select-none"
                             crossOrigin="anonymous"

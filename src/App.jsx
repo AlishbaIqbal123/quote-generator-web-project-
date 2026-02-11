@@ -1,24 +1,25 @@
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { Quote, Image as ImageIcon } from 'lucide-react';
+import { Quote, Image as ImageIcon, Sparkles } from 'lucide-react';
 import useQuote from './hooks/useQuote';
 import useUnsplash from './hooks/useUnsplash';
 import QuoteCard from './components/QuoteCard';
 import ImageGallery from './components/ImageGallery';
 import ThemeToggle from './components/ThemeToggle';
 import UserGuide from './components/UserGuide';
+import Studio from './components/Studio';
 
 const App = () => {
-  // State for active tab (Quote vs Gallery) to manage UI switching
+  // State for active tab (Quote vs Gallery vs Studio)
   const [activeTab, setActiveTab] = useState('quote');
 
-  // State for gallery search input to allow user queries
+  // State for gallery search input
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Custom hook for Quote logic - separates business logic from UI
+  // Custom hook for Quote logic
   const { quote, loading: quoteLoading, fetchQuote } = useQuote();
 
-  // Custom hook for Unsplash logic - handles API calls and image data
+  // Custom hook for Unsplash logic
   const { images, loading: imagesLoading, fetchImages } = useUnsplash('nature');
 
   return (
@@ -55,32 +56,47 @@ const App = () => {
         <div className="flex p-1.5 space-x-1 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-2xl mb-16 shadow-lg border border-white/20 dark:border-slate-800">
           <button
             onClick={() => setActiveTab('quote')}
-            className={`flex items-center gap-2 px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
+            className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'quote'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <Quote size={18} />
-            Quote Generator
+            <span className="hidden sm:inline">Quote Generator</span>
+            <span className="sm:hidden">Quote</span>
           </button>
 
           <button
             onClick={() => setActiveTab('gallery')}
-            className={`flex items-center gap-2 px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
+            className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
               ${activeTab === 'gallery'
                 ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
           >
             <ImageIcon size={18} />
-            Image Gallery
+            <span className="hidden sm:inline">Image Gallery</span>
+            <span className="sm:hidden">Gallery</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('studio')}
+            className={`flex items-center gap-2 px-6 sm:px-8 py-3 text-sm font-bold leading-5 rounded-xl transition-all duration-300 focus:outline-none
+              ${activeTab === 'studio'
+                ? 'bg-white dark:bg-slate-700 shadow-md text-indigo-700 dark:text-indigo-300'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+          >
+            <Sparkles size={18} />
+            <span className="hidden sm:inline">Design Studio</span>
+            <span className="sm:hidden">Studio</span>
           </button>
         </div>
 
         {/* Tab Content */}
         <div className="w-full flex justify-center perspective-1000">
-          {activeTab === 'quote' ? (
+          {activeTab === 'quote' && (
             <div className="w-full flex justify-center animate-fade-in">
               <QuoteCard
                 quote={quote}
@@ -88,7 +104,8 @@ const App = () => {
                 fetchQuote={fetchQuote}
               />
             </div>
-          ) : (
+          )}
+          {activeTab === 'gallery' && (
             <ImageGallery
               images={images}
               loading={imagesLoading}
@@ -96,6 +113,9 @@ const App = () => {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
             />
+          )}
+          {activeTab === 'studio' && (
+            <Studio />
           )}
         </div>
       </main>
