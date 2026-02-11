@@ -60,20 +60,31 @@ function App() {
     }
   }, [activeTab]);
 
-  const handleDownload = async (url, filename) => {
+  const handleDownload = async (img) => {
     try {
-      const response = await fetch(url);
+      toast.loading('Downloading...', { id: 'download' });
+
+      // Trigger Unsplash download tracking
+      await axios.get(img.links.download_location, {
+        headers: { Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}` }
+      }).catch(err => console.error("Tracking failed", err));
+
+      // Fetch the actual image
+      const response = await fetch(img.urls.regular);
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
+
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = `inspiria-${filename}.jpg`;
+      link.download = `inspiria-${img.id}.jpg`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      toast.success('Download started!');
+
+      toast.success('Download started!', { id: 'download' });
     } catch (err) {
-      toast.error('Download failed.');
+      console.error(err);
+      toast.error('Download failed. Try opening in new tab.', { id: 'download' });
     }
   };
 
@@ -88,12 +99,13 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div className="main-wrapper">
+      <div className="background-animate"></div>
       <Toaster position="bottom-center" />
 
       <header className="app-header">
         <h1 className="title-gradient">Inspiria</h1>
-        <p className="subtitle">Premium Creative Portal</p>
+        <p className="subtitle">Daily Inspiration & Creative Assets</p>
       </header>
 
       <div className="tabs">
@@ -102,7 +114,7 @@ function App() {
           onClick={() => setActiveTab('quote')}
         >
           <Quote size={18} style={{ marginRight: 8 }} />
-          Quote Generator
+          Daily Quote
         </button>
         <button
           className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
@@ -113,39 +125,42 @@ function App() {
         </button>
       </div>
 
-      <main>
+      <main className="content-container">
         <AnimatePresence mode="wait">
           {activeTab === 'quote' ? (
-            <motion.section
+            <motion.div
               key="quote"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="glass-card quote-container"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="quote-card-wrapper"
             >
-              <div className="quote-content">
-                <p className="quote-text">"{quote.text}"</p>
-                <p className="quote-author">— {quote.author}</p>
-              </div>
+              <div className="glass-card quote-card">
+                <div className="quote-icon-bg"><Quote size={80} /></div>
+                <div className="quote-content">
+                  <p className="quote-text">"{quote.text}"</p>
+                  <div className="quote-divider"></div>
+                  <p className="quote-author">{quote.author}</p>
+                </div>
 
-              <div className="quote-actions">
-                <button onClick={copyToClipboard} className="tab-btn" title="Copy">
-                  <Copy size={20} />
-                </button>
-                <button onClick={shareTwitter} className="tab-btn" title="Tweet">
-                  <Twitter size={20} />
-                </button>
-                <button
-                  onClick={fetchQuote}
-                  className="tab-btn active"
-                  disabled={loading}
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-                >
-                  <RefreshCw size={18} className={loading ? 'spin' : ''} />
-                  New Quote
-                </button>
+                <div className="quote-actions">
+                  <button onClick={copyToClipboard} className="icon-btn" title="Copy">
+                    <Copy size={22} />
+                  </button>
+                  <button onClick={shareTwitter} className="icon-btn" title="Tweet">
+                    <Twitter size={22} />
+                  </button>
+                  <button
+                    onClick={fetchQuote}
+                    className="generate-btn"
+                    disabled={loading}
+                  >
+                    <RefreshCw size={20} className={loading ? 'spin' : ''} />
+                    <span>New Quote</span>
+                  </button>
+                </div>
               </div>
-            </motion.section>
+            </motion.div>
           ) : (
             <motion.section
               key="gallery"
@@ -160,12 +175,12 @@ function App() {
               >
                 <input
                   type="text"
-                  placeholder="Search stunning images..."
+                  placeholder="Search for inspiration..."
                   className="search-input"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button type="submit" className="tab-btn active">
+                <button type="submit" className="search-btn">
                   <Search size={20} />
                 </button>
               </form>
@@ -177,20 +192,22 @@ function App() {
                   <motion.div
                     layout
                     key={img.id}
-                    className="glass-card image-card"
+                    className="image-card"
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <img src={img.urls.regular} alt={img.alt_description} />
+                    <img src={img.urls.regular} alt={img.alt_description} loading="lazy" />
                     <div className="image-overlay">
-                      <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{img.user.name}</p>
+                      <div className="photographer-info">
+                        <img src={img.user.profile_image.small} alt={img.user.name} className="user-avatar" />
+                        <span>{img.user.name}</span>
+                      </div>
                       <button
                         className="download-btn"
-                        onClick={() => handleDownload(img.links.download, img.id)}
+                        onClick={() => handleDownload(img)}
                       >
-                        <Download size={16} />
-                        Download
+                        <Download size={18} />
                       </button>
                     </div>
                   </motion.div>
@@ -201,8 +218,8 @@ function App() {
         </AnimatePresence>
       </main>
 
-      <footer style={{ marginTop: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-        <p>&copy; 2024 Inspiria x Internee.pk | Designed with ❤️</p>
+      <footer>
+        <p>Inspiria &copy; 2024</p>
       </footer>
     </div>
   );
