@@ -31,7 +31,10 @@ const ImageEditor = ({ image, onClose }) => {
         fontFamily: 'Playfair Display',
         fontWeight: 'bold',
         fontStyle: 'normal',
-        textAlign: 'center'
+        textAlign: 'center',
+        textDecoration: 'none',
+        textTransform: 'none',
+        letterSpacing: 0
     });
 
     const [filters, setFilters] = useState({
@@ -115,6 +118,9 @@ const ImageEditor = ({ image, onClose }) => {
                                     fontWeight: textStyle.fontWeight,
                                     fontStyle: textStyle.fontStyle,
                                     textAlign: textStyle.textAlign,
+                                    textDecoration: textStyle.textDecoration,
+                                    textTransform: textStyle.textTransform,
+                                    letterSpacing: `${textStyle.letterSpacing}px`,
                                     textShadow: '0 4px 8px rgba(0,0,0,0.8)',
                                     minWidth: '200px'
                                 }}
@@ -166,30 +172,78 @@ const ImageEditor = ({ image, onClose }) => {
                                 </select>
                             </div>
 
-                            {/* Font Style Buttons */}
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => updateStyle('fontWeight', textStyle.fontWeight === 'bold' ? 'normal' : 'bold')}
-                                    className={`p-2 rounded-lg border ${textStyle.fontWeight === 'bold' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
-                                    title="Bold"
-                                >
-                                    <Bold size={18} />
-                                </button>
-                                <button
-                                    onClick={() => updateStyle('fontStyle', textStyle.fontStyle === 'italic' ? 'normal' : 'italic')}
-                                    className={`p-2 rounded-lg border ${textStyle.fontStyle === 'italic' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
-                                    title="Italic"
-                                >
-                                    <Italic size={18} />
-                                </button>
-                                {/* Alignment (Simple Toggle for now, can be expanded) */}
-                                <button
-                                    onClick={() => updateStyle('textAlign', textStyle.textAlign === 'center' ? 'left' : textStyle.textAlign === 'left' ? 'right' : 'center')}
-                                    className="p-2 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400 font-mono text-xs w-10"
-                                    title="Text Align"
-                                >
-                                    {textStyle.textAlign === 'center' ? 'ctr' : textStyle.textAlign === 'left' ? 'lft' : 'rgt'}
-                                </button>
+                            {/* Font Style & Alignment Buttons */}
+                            <div className="space-y-3">
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => updateStyle('fontWeight', textStyle.fontWeight === 'bold' ? 'normal' : 'bold')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center ${textStyle.fontWeight === 'bold' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Bold"
+                                    >
+                                        <Bold size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => updateStyle('fontStyle', textStyle.fontStyle === 'italic' ? 'normal' : 'italic')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center ${textStyle.fontStyle === 'italic' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Italic"
+                                    >
+                                        <Italic size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => updateStyle('textDecoration', textStyle.textDecoration === 'underline' ? 'none' : 'underline')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center ${textStyle.textDecoration === 'underline' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Underline"
+                                    >
+                                        <Underline size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => updateStyle('textTransform', textStyle.textTransform === 'uppercase' ? 'none' : 'uppercase')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center font-bold items-center ${textStyle.textTransform === 'uppercase' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Uppercase"
+                                    >
+                                        <span className="text-xs">TT</span>
+                                    </button>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => updateStyle('textAlign', 'left')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center ${textStyle.textAlign === 'left' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Align Left"
+                                    >
+                                        <AlignLeft size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => updateStyle('textAlign', 'center')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center ${textStyle.textAlign === 'center' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Align Center"
+                                    >
+                                        <AlignCenter size={18} />
+                                    </button>
+                                    <button
+                                        onClick={() => updateStyle('textAlign', 'right')}
+                                        className={`p-2 rounded-lg border flex-1 flex justify-center ${textStyle.textAlign === 'right' ? 'bg-indigo-100 dark:bg-indigo-900 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400'}`}
+                                        title="Align Right"
+                                    >
+                                        <AlignRight size={18} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Letter Spacing Slider */}
+                            <div>
+                                <label className="flex justify-between text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                    <span>Letter Spacing</span>
+                                    <span>{textStyle.letterSpacing}px</span>
+                                </label>
+                                <input
+                                    type="range"
+                                    min="-2"
+                                    max="20"
+                                    value={textStyle.letterSpacing}
+                                    onChange={(e) => updateStyle('letterSpacing', parseInt(e.target.value))}
+                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-indigo-600"
+                                />
                             </div>
 
                             {/* Font Size Slider */}
