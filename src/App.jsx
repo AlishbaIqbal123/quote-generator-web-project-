@@ -1,228 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Quote, Image as ImageIcon, Search, Download, RefreshCw, Copy, Twitter, Instagram } from 'lucide-react';
-import { Toaster, toast } from 'react-hot-toast';
-import './App.css';
+import { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { Quote, Image as ImageIcon } from 'lucide-react';
+import useQuote from './hooks/useQuote';
+import useUnsplash from './hooks/useUnsplash';
+import QuoteCard from './components/QuoteCard';
+import ImageGallery from './components/ImageGallery';
+import ThemeToggle from './components/ThemeToggle';
 
-const UNSPLASH_ACCESS_KEY = '63bWwYPkkVI9cK-idE5Z6d-eTIWCXlzZB8Pm56nwIVg'; // User should replace this
-
-function App() {
+const App = () => {
   const [activeTab, setActiveTab] = useState('quote');
-  const [quote, setQuote] = useState({ text: 'Inspiration is the spark that lights the path to greatness.', author: 'Inspiria' });
-  const [images, setImages] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  // Quote Generation
-  const fetchQuote = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get('https://api.allorigins.win/get?url=' + encodeURIComponent('https://zenquotes.io/api/random'));
-      const data = JSON.parse(res.data.contents)[0];
-      setQuote({ text: data.q, author: data.a });
-    } catch (err) {
-      toast.error('Failed to fetch new quote. Using fallback.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Image Fetching
-  const fetchImages = async (query = 'nature') => {
-    setLoading(true);
-    try {
-      const endpoint = searchQuery
-        ? `https://api.unsplash.com/search/photos?query=${searchQuery}&per_page=12&client_id=${UNSPLASH_ACCESS_KEY}`
-        : `https://api.unsplash.com/photos/random?count=12&client_id=${UNSPLASH_ACCESS_KEY}`;
-
-      const res = await axios.get(endpoint);
-      const newImages = searchQuery ? res.data.results : res.data;
-      setImages(newImages);
-    } catch (err) {
-      if (UNSPLASH_ACCESS_KEY === 'YOUR_UNSPLASH_ACCESS_KEY') {
-        toast.error('Please add your Unsplash Access Key in App.jsx');
-      } else {
-        toast.error('Failed to fetch images.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchQuote();
-  }, []);
-
-  useEffect(() => {
-    if (activeTab === 'gallery') {
-      fetchImages();
-    }
-  }, [activeTab]);
-
-  const handleDownload = async (img) => {
-    try {
-      toast.loading('Downloading...', { id: 'download' });
-
-      // Trigger Unsplash download tracking
-      await axios.get(img.links.download_location, {
-        headers: { Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}` }
-      }).catch(err => console.error("Tracking failed", err));
-
-      // Fetch the actual image
-      const response = await fetch(img.urls.regular);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = `inspiria-${img.id}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      toast.success('Download started!', { id: 'download' });
-    } catch (err) {
-      console.error(err);
-      toast.error('Download failed. Try opening in new tab.', { id: 'download' });
-    }
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(`"${quote.text}" - ${quote.author}`);
-    toast.success('Quote copied!');
-  };
-
-  const shareTwitter = () => {
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${quote.text}" - ${quote.author}`)}`;
-    window.open(url, '_blank');
-  };
+  const { quote, loading: quoteLoading, fetchQuote } = useQuote();
+  const { images, loading: imagesLoading, fetchImages } = useUnsplash('nature');
 
   return (
-    <div className="main-wrapper">
-      <div className="background-animate"></div>
-      <Toaster position="bottom-center" />
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300 font-outfit flex flex-col">
+      <Toaster position="bottom-center" toastOptions={{
+        className: 'dark:bg-slate-800 dark:text-white',
+        style: { borderRadius: '10px', background: '#333', color: '#fff' },
+      }} />
 
-      <header className="app-header">
-        <h1 className="title-gradient">Inspiria</h1>
-        <p className="subtitle">Daily Inspiration & Creative Assets</p>
+      {/* Header */}
+      <header className="w-full py-6 px-4 md:px-8 flex justify-between items-center max-w-7xl mx-auto">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+            <span className="font-bold text-xl">I</span>
+          </div>
+          <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
+            Inspiria
+          </h1>
+        </div>
+        <ThemeToggle />
       </header>
 
-      <div className="tabs">
-        <button
-          className={`tab-btn ${activeTab === 'quote' ? 'active' : ''}`}
-          onClick={() => setActiveTab('quote')}
-        >
-          <Quote size={18} style={{ marginRight: 8 }} />
-          Daily Quote
-        </button>
-        <button
-          className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`}
-          onClick={() => setActiveTab('gallery')}
-        >
-          <ImageIcon size={18} style={{ marginRight: 8 }} />
-          Image Gallery
-        </button>
-      </div>
+      {/* Main Content */}
+      <main className="flex-grow flex flex-col items-center px-4 py-8 md:py-12 w-full max-w-7xl mx-auto">
 
-      <main className="content-container">
-        <AnimatePresence mode="wait">
+        {/* Navigation Tabs */}
+        <div className="flex p-1 space-x-1 bg-gray-200 dark:bg-slate-800 rounded-xl mb-12">
+          <button
+            onClick={() => setActiveTab('quote')}
+            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-medium leading-5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 ring-offset-2 ring-offset-gray-100 dark:ring-offset-slate-900 ring-indigo-500
+              ${activeTab === 'quote'
+                ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-300'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+              }`}
+          >
+            <Quote size={18} />
+            Quote Generator
+          </button>
+
+          <button
+            onClick={() => setActiveTab('gallery')}
+            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-medium leading-5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 ring-offset-2 ring-offset-gray-100 dark:ring-offset-slate-900 ring-indigo-500
+              ${activeTab === 'gallery'
+                ? 'bg-white dark:bg-slate-700 shadow text-indigo-700 dark:text-indigo-300'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+              }`}
+          >
+            <ImageIcon size={18} />
+            Image Gallery
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        <div className="w-full flex justify-center">
           {activeTab === 'quote' ? (
-            <motion.div
-              key="quote"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="quote-card-wrapper"
-            >
-              <div className="glass-card quote-card">
-                <div className="quote-icon-bg"><Quote size={80} /></div>
-                <div className="quote-content">
-                  <p className="quote-text">"{quote.text}"</p>
-                  <div className="quote-divider"></div>
-                  <p className="quote-author">{quote.author}</p>
-                </div>
-
-                <div className="quote-actions">
-                  <button onClick={copyToClipboard} className="icon-btn" title="Copy">
-                    <Copy size={22} />
-                  </button>
-                  <button onClick={shareTwitter} className="icon-btn" title="Tweet">
-                    <Twitter size={22} />
-                  </button>
-                  <button
-                    onClick={fetchQuote}
-                    className="generate-btn"
-                    disabled={loading}
-                  >
-                    <RefreshCw size={20} className={loading ? 'spin' : ''} />
-                    <span>New Quote</span>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+            <div className="w-full flex justify-center animate-fade-in">
+              <QuoteCard
+                quote={quote}
+                loading={quoteLoading}
+                fetchQuote={fetchQuote}
+              />
+            </div>
           ) : (
-            <motion.section
-              key="gallery"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="gallery-section"
-            >
-              <form
-                className="search-bar"
-                onSubmit={(e) => { e.preventDefault(); fetchImages(); }}
-              >
-                <input
-                  type="text"
-                  placeholder="Search for inspiration..."
-                  className="search-input"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button type="submit" className="search-btn">
-                  <Search size={20} />
-                </button>
-              </form>
-
-              {loading && <div className="loader"></div>}
-
-              <div className="grid-gallery">
-                {images.map((img) => (
-                  <motion.div
-                    layout
-                    key={img.id}
-                    className="image-card"
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <img src={img.urls.regular} alt={img.alt_description} loading="lazy" />
-                    <div className="image-overlay">
-                      <div className="photographer-info">
-                        <img src={img.user.profile_image.small} alt={img.user.name} className="user-avatar" />
-                        <span>{img.user.name}</span>
-                      </div>
-                      <button
-                        className="download-btn"
-                        onClick={() => handleDownload(img)}
-                      >
-                        <Download size={18} />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.section>
+            <ImageGallery
+              images={images}
+              loading={imagesLoading}
+              fetchImages={fetchImages}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
           )}
-        </AnimatePresence>
+        </div>
       </main>
 
-      <footer>
-        <p>Inspiria &copy; 2024</p>
+      {/* Footer */}
+      <footer className="w-full py-6 text-center text-gray-500 dark:text-slate-500 text-sm border-t border-gray-200 dark:border-slate-800 mt-auto">
+        <p>© {new Date().getFullYear()} Inspiria. Built with React & Tailwind CSS.</p>
       </footer>
     </div>
   );
-}
+};
 
 export default App;
