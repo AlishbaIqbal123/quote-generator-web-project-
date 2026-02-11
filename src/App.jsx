@@ -38,7 +38,7 @@ const App = () => {
   const pastelDark = ["#4a3a4d", "#3a4d4a", "#4d4a3a", "#3a3d4d"];
 
   return (
-    <div className="relative min-h-screen transition-all duration-700 font-outfit overflow-hidden bg-[#fff5f8] dark:bg-[#0b0e14] flex flex-col">
+    <div className="relative min-h-screen transition-all duration-700 font-outfit overflow-hidden flex flex-col">
       <UserGuide />
 
       {/* Premium Floating Lines Background */}

@@ -24,8 +24,7 @@ const useQuote = () => {
         } catch (err) {
             setError('Failed to fetch quote');
         } finally {
-            // Small delay for smooth transition even if API is instant
-            setTimeout(() => setLoading(false), 500);
+            setLoading(false);
         }
     };
 
