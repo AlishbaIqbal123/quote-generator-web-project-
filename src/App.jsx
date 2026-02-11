@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Quote, Image as ImageIcon, Sparkles } from 'lucide-react';
 import useQuote from './hooks/useQuote';
@@ -8,6 +8,7 @@ import ImageGallery from './components/ImageGallery';
 import ThemeToggle from './components/ThemeToggle';
 import UserGuide from './components/UserGuide';
 import Studio from './components/Studio';
+import FloatingLines from './components/FloatingLines';
 
 const App = () => {
   // State for active tab (Quote vs Gallery vs Studio)
@@ -22,14 +23,30 @@ const App = () => {
   // Custom hook for Unsplash logic
   const { images, loading: imagesLoading, fetchImages } = useUnsplash('nature');
 
+  // Detection for dark mode to change line colors
+  const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  const pastelLight = ["#ffccd5", "#ffb3ba", "#baffc9", "#bae1ff", "#e0bbe4"];
+  const pastelDark = ["#4a3a4d", "#3a4d4a", "#4d4a3a", "#3a3d4d"];
+
   return (
-    <div className="relative min-h-screen transition-colors duration-500 font-outfit overflow-hidden bg-slate-50 dark:bg-slate-950 flex flex-col">
+    <div className="relative min-h-screen transition-all duration-700 font-outfit overflow-hidden bg-[#fff5f8] dark:bg-[#0b0e14] flex flex-col">
       <UserGuide />
 
-      {/* Animated Background Blobs */}
-      <div className="bg-blob blob-1"></div>
-      <div className="bg-blob blob-2"></div>
-      <div className="bg-blob blob-3"></div>
+      {/* Premium Floating Lines Background */}
+      <FloatingLines
+        linesGradient={isDarkMode ? pastelDark : pastelLight}
+        animationSpeed={0.4}
+        parallaxStrength={0.1}
+      />
 
       <Toaster position="bottom-center" toastOptions={{
         className: 'dark:bg-slate-800 dark:text-white',
